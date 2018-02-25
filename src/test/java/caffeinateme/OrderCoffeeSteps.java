@@ -3,15 +3,18 @@ package caffeinateme;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import net.thucydides.core.annotations.Steps;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class OrderCoffeeSteps {
 
-    Customer cathy = new Customer();
+    @Steps
+    Customer cathy;
 
-    Barista barry = new Barista();
+    @Steps
+    Barista barry;
 
     String cathyOrder;
 
@@ -29,7 +32,7 @@ public class OrderCoffeeSteps {
 
     @Then("^Barry should receive the order$")
     public void barry_should_receive_the_order() throws Exception {
-        assertThat(barry.getPendingOrders(), hasItem(cathyOrder));
+        barry.shouldHaveAPendingOrderFor(cathyOrder);
     }
 
     @Then("^Barry should know that the order is (.*)$")
