@@ -24,7 +24,7 @@ public class OrderCoffeeSteps {
     }
 
 
-    @When("^Cathy orders a (.*)$")
+    @When("^Cathy (?:orders|has ordered) a (.*)$")
     public void cathy_orders_a(String order) throws Exception {
         this.cathyOrder = order;
         cathy.placesOrderFor(cathyOrder);
