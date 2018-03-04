@@ -5,13 +5,14 @@ public class Order {
     private final long clientId;
     private final int quantity;
     private final String product;
-    private OrderPriority priority;
+    private Urgency urgency;
+    private int etaInMinutes;
 
     public Order(long clientId, int quantity, String product) {
         this.clientId = clientId;
         this.quantity = quantity;
         this.product = product;
-        this.priority = OrderPriority.Normal;
+        this.urgency = Urgency.Normal;
     }
 
     public long getClientId() {
@@ -26,8 +27,10 @@ public class Order {
         return product;
     }
 
-    public OrderPriority getPriority() {
-        return priority;
+    public Urgency getUrgency() {
+        if (etaInMinutes < 5) return Urgency.Urgent;
+        if (etaInMinutes <= 10) return Urgency.High;
+        return Urgency.Normal;
     }
 
     public OrderReceipt getReceipt() {
@@ -40,6 +43,8 @@ public class Order {
                 "clientId=" + clientId +
                 ", quantity=" + quantity +
                 ", product='" + product + '\'' +
+                ", urgency=" + urgency +
+                ", etaInMinutes=" + etaInMinutes +
                 '}';
     }
 
@@ -53,7 +58,7 @@ public class Order {
         if (clientId != order.clientId) return false;
         if (quantity != order.quantity) return false;
         if (!product.equals(order.product)) return false;
-        return priority == order.priority;
+        return urgency == order.urgency;
     }
 
     @Override
@@ -61,11 +66,15 @@ public class Order {
         int result = (int) (clientId ^ (clientId >>> 32));
         result = 31 * result + quantity;
         result = 31 * result + product.hashCode();
-        result = 31 * result + priority.hashCode();
+        result = 31 * result + urgency.hashCode();
         return result;
     }
 
     public static Order matchingReceipt(OrderReceipt orderReceipt) {
-        return new Order(orderReceipt.getClientId(), orderReceipt.getQuanity(), orderReceipt.getProduct());
+        return new Order(orderReceipt.getClientId(), orderReceipt.getQuantity(), orderReceipt.getProduct());
+    }
+
+    public void updateEtaTo(int etaInMinutes) {
+        this.etaInMinutes = etaInMinutes;
     }
 }

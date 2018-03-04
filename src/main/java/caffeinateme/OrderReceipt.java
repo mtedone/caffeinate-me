@@ -16,7 +16,7 @@ public class OrderReceipt {
         return clientId;
     }
 
-    public int getQuanity() {
+    public int getQuantity() {
         return quanity;
     }
 

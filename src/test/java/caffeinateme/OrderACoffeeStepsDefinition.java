@@ -2,35 +2,29 @@ package caffeinateme;
 
 import caffeinateme.steps.Barista;
 import caffeinateme.steps.Customer;
-import caffeinateme.steps.UserRegistrationClient;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
 
+import static caffeinateme.UserRegistrationStepsDefinition.ORDER_RECEIPT;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class OrderACoffeeStepsDefinition {
 
-    @Steps
-    UserRegistrationClient userRegistration;
-
-    @Steps
-    Customer cathy;
+    @Steps(shared = true)
+    Customer customer;
 
     @Steps
     Barista barry;
 
     OrderReceipt orderReceipt;
 
-    @Given("^Cathy has a Caffeinate-Me account$")
-    public void cathy_has_a_Caffeinate_Me_account() throws Exception {
-        userRegistration.registerUser(cathy);
-    }
-
-    @When("^s?he orders a (.*)$")
+    @When("^(?:.*) (?:orders|has ordered) an? (.*)$")
     public void she_orders_a_large_cappuccino(String order) throws Exception {
-        orderReceipt = cathy.placesAnOrderFor(1, order);
+        orderReceipt = customer.placesAnOrderFor(1, order);
+
+        Serenity.setSessionVariable(ORDER_RECEIPT).to(orderReceipt);
     }
 
     @Then("^Barry should receive the order$")

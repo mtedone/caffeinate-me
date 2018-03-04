@@ -24,4 +24,9 @@ public class Customer extends ScenarioActor {
     public OrderReceipt placesAnOrderFor(int quantity, String product) {
         return coffeeOrders.placeOrder(customerId, quantity, product);
     }
+
+    @Step("#actor updates her ETA to {0}")
+    public void updatesEtaTo(int minutesAway) {
+        coffeeOrders.updateCustomerEta(customerId, minutesAway);
+    }
 }
