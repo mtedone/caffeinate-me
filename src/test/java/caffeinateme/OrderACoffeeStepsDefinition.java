@@ -2,6 +2,7 @@ package caffeinateme;
 
 import caffeinateme.steps.Barista;
 import caffeinateme.steps.Customer;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -22,6 +23,9 @@ public class OrderACoffeeStepsDefinition {
     Barista barry;
 
     OrderReceipt orderReceipt;
+
+    @Steps(shared = true)
+    private ProductCatalogue productCatalogue;
 
     @When("^(?:.*) (?:orders|has ordered) an? (.*)$")
     public void she_orders_a_large_cappuccino(String order) throws Exception {
@@ -46,5 +50,22 @@ public class OrderACoffeeStepsDefinition {
                     customer.placesAnOrderFor(order.getQuantity(), order.getProduct());
                 }
         );
+    }
+
+    Receipt receipt;
+    @When("^(?:.*) asks for a receipt$")
+    public void sheAsksForAReceipt() throws Throwable {
+        receipt = customer.requestAReceipt();
+    }
+
+    @Then("^she should receive a receipt totalling:$")
+    public void sheShouldReceiveAReceiptTotalling(List<Receipt> receipts) throws Throwable {
+        Receipt customerReceipt = receipts.get(0);
+        assertThat(customerReceipt).isEqualToIgnoringNullFields(receipt);
+    }
+
+    @And("^the following prices:$")
+    public void theFollowingPrices(List<ProductPrice> productPrices) throws Throwable {
+        productCatalogue.addProductsWithPrices(productPrices);
     }
 }

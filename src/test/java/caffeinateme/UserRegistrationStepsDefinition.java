@@ -20,4 +20,5 @@ public class UserRegistrationStepsDefinition {
         userRegistration.registerUser(customer);
         customer.isCalled(userName);
     }
+
 }
