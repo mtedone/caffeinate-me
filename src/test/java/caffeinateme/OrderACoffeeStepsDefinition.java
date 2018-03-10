@@ -2,10 +2,13 @@ package caffeinateme;
 
 import caffeinateme.steps.Barista;
 import caffeinateme.steps.Customer;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
+
+import java.util.List;
 
 import static caffeinateme.UserRegistrationStepsDefinition.ORDER_RECEIPT;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -35,4 +38,13 @@ public class OrderACoffeeStepsDefinition {
     }
 
 
+    @Given("^Sarah has ordered:$")
+    public void sarahHasOrdered(List<OrderItem> orders) throws Throwable {
+        System.out.println(orders);
+        orders.forEach(
+                order -> {
+                    customer.placesAnOrderFor(order.getQuantity(), order.getProduct());
+                }
+        );
+    }
 }
